@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+
+import sys
+from typing import Sequence
+
+import snapshot
+
+USAGE = """Usage:
+- create: zfsbak DATASET [ROTATION_CNT]
+- list: zfsbak -l|--list [DATASET|ID|DATASET ID]
+- delete: zfsbak -d|--delete [DATASET|ID|DATASET ID...]
+- export: zfsbak -e|--export DATASET [ID]
+- import: zfsbak -i|--import FILENAME DATASET"""
+
+
+def create_snapshot(args: Sequence[str]):
+    dataset, *rest = args
+    if len(rest) > 0:
+        snapshot.create_one(dataset, int(rest[0]))
+    else:
+        snapshot.create_one(dataset)
+
+
+def list_snapshots(args: Sequence[str]):
+    match args:  # noqa
+        case [dataset, id]:
+            snapshot.list_filtered(dataset, int(id))
+        case [arg]:
+            if arg.isdigit():
+                snapshot.list_filtered(id=int(arg))
+            else:
+                snapshot.list_filtered(dataset=arg)
+        case _:
+            snapshot.list_filtered()
+
+
+def delete_snapshots(args: Sequence[str]):
+    match args:  # noqa
+        case [arg]:
+            if arg.isdigit():
+                snapshot.delete_filtered(ids=[int(arg)])
+            else:
+                snapshot.delete_filtered(dataset=arg)
+        case [dataset, *ids]:
+            snapshot.delete_filtered(dataset, [int(num) for num in ids])
+        case _:
+            snapshot.delete_filtered()
+
+
+def export_snapshot(args: Sequence[str]):
+    snapshot.export_snapshot()
+
+
+def import_snapshot(args: Sequence[str]):
+    snapshot.import_snapshot()
+
+
+def main():
+    match sys.argv[1:]:  # noqa
+        case []:
+            print(USAGE)
+        case ["-l" | "--list", *rest]:
+            list_snapshots(rest)
+        case ["-d" | "--delete", *rest]:
+            delete_snapshots(rest)
+        case ["-e" | "--export", *rest]:
+            export_snapshot(rest)
+        case ["-i" | "--import", *rest]:
+            import_snapshot(rest)
+        case other:
+            create_snapshot(other)
+
+
+if __name__ == "__main__":
+    main()
