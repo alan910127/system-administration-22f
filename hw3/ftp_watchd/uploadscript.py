@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import socket
 import sys
 from datetime import datetime
@@ -8,8 +9,7 @@ from pathlib import Path
 from typing import Sequence
 
 HOME_DIR = Path("/") / "home" / "ftp"
-HIDDEN_DIR = HOME_DIR / "hidden"
-VIOFILE_DIR = HIDDEN_DIR / ".exe"
+VIOFILE_DIR = HOME_DIR / "hidden" / ".exe"
 LOG_FILE = HOME_DIR / "public" / "pureftpd.viofile"
 
 
@@ -31,7 +31,7 @@ def main(args: Sequence[str]):
             file=log_file,
         )
 
-    file.rename(VIOFILE_DIR / file.name)
+    shutil.move(filename, VIOFILE_DIR / file.name)
 
 
 if __name__ == "__main__":
