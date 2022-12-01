@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# PROVIDE: ftp-watchd
+# REQUIRE: pure-ftpd
+
+. /etc/rc.subr
+
+name=ftp_watchd
+rcvar=${name}_enable
+
+load_rc_config ${name}
+
+command=/usr/local/sbin/pure-uploadscript
+pidfile=${ftp_watchd_pidfile:-"/var/run/pure-uploadscript.pid"}
+procfile=pure-uploadscript
+
+ftp_watchd_enable=${ftp_watchd_enable:-"no"}
+ftp_watchd_uploadscript=${ftp_watchd_uploadscript:-"/home/alan/uploadscript.py"}
+ftp_watchd_gid=${ftp_watchd_gid:-"1004"}
+
+command_args="-B -r ${ftp_watchd_uploadscript} -g ${ftp_watchd_gid}"
+
+stop_cmd=stop_cmd
+
+stop_cmd() {
+    local pid=$(check_pidfile ${pidfile} ${command})
+    if [ "${pid}" ]; then
+        echo "Kill: ${pid}"
+        kill "${pid}"
+    fi
+}
+
+run_rc_command "$1"
