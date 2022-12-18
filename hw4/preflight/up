@@ -1,0 +1,10 @@
+#!/bin/sh
+
+DOMAIN="$1"
+BASE_DIR="/home/alan/hw4/preflight"
+DATA_DIR="${BASE_DIR}/data"
+SRC_DIR="${BASE_DIR}/src"
+
+sh "${SRC_DIR}/setup-config.sh" "${DOMAIN}" "${DATA_DIR}/Caddyfile.sample" "${DATA_DIR}/Caddyfile"
+sh "${SRC_DIR}/setup-cname.sh" "${DOMAIN}"
+sh "${SRC_DIR}/health-check.sh" "${DOMAIN}"
