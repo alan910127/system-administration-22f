@@ -1,0 +1,9 @@
+#!/bin/sh
+
+BASE="/home/judge/hw4/4-5"
+PYTHON="${BASE}/.venv/bin/python3"
+SCRIPT="${BASE}/src/main.py"
+
+SOURCE_URL="$1"
+
+"${PYTHON}" "${SCRIPT}" "${SOURCE_URL}"
