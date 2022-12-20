@@ -1,0 +1,11 @@
+#!/bin/sh
+
+BASE="/home/judge/hw4/4-2"
+SRC="${BASE}/src"
+DATA="${BASE}/data"
+
+DOMAIN="$1"
+
+sh "${SRC}/setup-config.sh" "${DOMAIN}" "${DATA}/Caddyfile.sample" "${DATA}/Caddyfile"
+sh "${SRC}/setup-cname.sh" "${DOMAIN}"
+sh "${SRC}/check-stat.sh" "${DOMAIN}"

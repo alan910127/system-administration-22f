@@ -1,0 +1,40 @@
+{
+    acme_ca https://ca.nasa.nycu:9000/acme/acme/directory
+    acme_ca_root /home/alan/hw4/rootca.pem
+}
+
+(cors) {
+    @cors_preflight method OPTIONS
+    @cors header Origin "{args.0}"
+
+    handle @cors_preflight {
+        header Access-Control-Allow-Origin "{args.0}"
+        header Access-Control-Allow-Method "OPTIONS, {header.Access-Control-Request-Method}"
+        respond "" 200
+    }
+
+    handle @cors {
+        header Access-Control-Allow-Origin "{args.0}"
+    }
+}
+
+http://<DOMAIN> {
+    redir https://<DOMAIN>
+}
+
+https://<DOMAIN> {
+    import cors "{header.Origin}"
+
+    header X-Forwarded-For "{header.Origin}, https://<DOMAIN>"
+
+    @not_query {
+        not path "/api/1.0/query/*"
+    }
+
+    uri @not_query strip_prefix "/api/1.0"
+    rewrite "/api/1.0/query/*" "/query?k={path.3}&v={path.4}"
+
+    reverse_proxy http://ca.nasa.nycu:4442 {
+        header_down -X-Powered-By
+    }
+}
