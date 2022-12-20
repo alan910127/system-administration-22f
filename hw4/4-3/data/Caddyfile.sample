@@ -1,0 +1,12 @@
+{
+    acme_ca https://ca.nasa.nycu:9000/acme/acme/directory
+    acme_ca_root /home/alan/hw4/rootca.pem
+}
+
+http://<DOMAIN> {
+    redir https://<DOMAIN>
+}
+
+https://<DOMAIN> {
+    reverse_proxy http://localhost:8000
+}
