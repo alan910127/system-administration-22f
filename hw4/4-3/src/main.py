@@ -1,4 +1,4 @@
-import shutil
+import subprocess
 import time
 
 import uvicorn
@@ -6,23 +6,20 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-start_time: float = 0
 
-
-@app.on_event("startup")
-async def handle_startup():
-    global start_time
-    start_time = time.time()
+def get_disk_free_ratio() -> float:
+    disk_info = subprocess.check_output(["df"], encoding="ascii").splitlines()
+    root_info = [info for info in disk_info if info.startswith("zroot/ROOT/default")][0]
+    zroot_capacity = root_info.split()[4].removesuffix("%")
+    return int(zroot_capacity) / 100
 
 
 @app.get("/")
 async def health_check():
-    total, _, free = shutil.disk_usage("/")
-    current_time = time.time()
     return {
-        "disk": free / total,
-        "uptime": int(current_time - start_time),
-        "time": int(current_time),
+        "disk": get_disk_free_ratio(),
+        "uptime": int(time.monotonic()),
+        "time": int(time.time()),
     }
 
 
