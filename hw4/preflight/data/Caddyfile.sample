@@ -4,7 +4,7 @@
 }
 
 http://<DOMAIN> {
-    redir https://<DONAIN>
+    redir https://<DOMAIN>
 }
 
 https://<DOMAIN> {
