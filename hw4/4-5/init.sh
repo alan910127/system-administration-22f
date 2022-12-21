@@ -1,8 +1,6 @@
 #!/bin/sh
 
+PDM="/home/judge/.local/bin/pdm"
 BASE="/home/judge/hw4/4-5"
-VENV="${BASE}/.venv"
-PIP="${VENV}/bin/pip"
 
-python3 -m venv "${VENV}"
-"${PIP}" install -r "${BASE}/data/requirements.txt"
+"${PDM}" install -p "${BASE}"

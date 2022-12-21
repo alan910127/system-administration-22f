@@ -6,6 +6,20 @@ DATA="${BASE}/data"
 
 DOMAIN="$1"
 
-sh "${SRC}/setup-config.sh" "${DOMAIN}" "${DATA}/Caddyfile.sample" "${DATA}/Caddyfile"
-sh "${SRC}/setup-cname.sh" "${DOMAIN}"
-sh "${SRC}/check-stat.sh" "${DOMAIN}"
+# Change domain
+sed "s/<DOMAIN>/${DOMAIN}/g" "${DATA}/Caddyfile.sample" > "${DATA}/Caddyfile"
+
+# Reload config
+caddy reload --adapter caddyfile --config "${DATA}/Caddyfile"
+
+# setup domain
+sudo sed -i "" "s/[a-zA-Z0-9-]*.28.nasa.nycu/${DOMAIN}/" /etc/hosts
+
+# check server status
+until curl "https://${DOMAIN}"; do
+    echo "* Server is starting..."
+done
+
+# sh "${SRC}/setup-config.sh" "${DOMAIN}" "${DATA}/Caddyfile.sample" "${DATA}/Caddyfile"
+# sh "${SRC}/setup-cname.sh" "${DOMAIN}"
+# sh "${SRC}/check-stat.sh" "${DOMAIN}"

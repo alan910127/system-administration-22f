@@ -1,0 +1,18 @@
+[tool]
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "alan910127", email = "alan469357@gmail.com"},
+]
+dependencies = [
+    "requests>=2.28.1",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.pdm.scripts]
+start = "python3 src/main.py"

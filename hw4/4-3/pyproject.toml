@@ -1,0 +1,19 @@
+[tool]
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "alan910127", email = "alan469357@gmail.com"},
+]
+dependencies = [
+    "fastapi>=0.88.0",
+    "uvicorn>=0.20.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.pdm.scripts]
+dev = "uvicorn src.main:app --host '0.0.0.0' --port 8000 --reload"
