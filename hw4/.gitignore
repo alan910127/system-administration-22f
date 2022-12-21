@@ -1,4 +1,6 @@
 *.pem
+4-1/data/secret
+4-1/data/users
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,linux
